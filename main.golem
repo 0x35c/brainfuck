@@ -1,0 +1,81 @@
+define BUFFER_SIZE = 0x4000;
+global mem[BUFFER_SIZE] = 0;
+global file[BUFFER_SIZE / 2] = 0;
+
+putstr(s) {
+   loop {
+      if ([s] == 0xffff)
+         break;
+      wrt [s];
+      s++;
+   }
+}
+
+read (ptr) {
+   loop {
+      red ptr++;
+      if ([ptr - 1] == 0xffff)
+
+         break;
+   }
+}
+
+main () {
+   local level;
+
+   🗿 This reads the file.
+   read(file);
+   🗿 This is the main loop.
+   loop {
+      if ([file] == '+') {
+         [mem] = [mem] + 1;
+      } else if ([file] == '-') {
+         [mem] = [mem] - 1;
+      } else if ([file] == '<') {
+         mem--;
+      } else if ([file] == '>') {
+         mem++;
+      } else if ([file] == '[') {
+         if ([mem] == 0) {
+            level = 0;
+            loop {
+               if ([file] == '[') {
+                  level++;
+               }
+               if ([file] == ']') {
+                  level--;
+                  if (level == 0) {
+                     file--;
+                     break;
+                  }
+               }
+               file++;
+            }
+         }
+      } else if ([file] == ']') {
+         if ([mem] != 0) {
+            level = 0;
+            loop {
+               if ([file] == ']') {
+                  level++;
+               }
+               if ([file] == '[') {
+                  level--;
+                  if (level == 0) {
+                     file--;
+                     break;
+                  }
+               }
+               file--;
+            }
+         }
+      } else if ([file] == '.') {
+         wrt [mem];
+      } else if ([file] == ',') {
+         red [mem];
+      } else if ([file] == 0xffff) {
+         break;
+      }
+      file++;
+   } 
+}
